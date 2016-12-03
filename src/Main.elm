@@ -84,40 +84,16 @@ stoogeValidations =
 
 
 type Msg
-    = UpdateEmailText String
-    | UpdatePasswordText String
-    | UpdateAgeText String
-    | UpdateStoogeText String
+    = UpdateFormText String String
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
-        UpdateEmailText text ->
+        UpdateFormText fieldName value ->
             { model
                 | signupForm =
-                    Forms.updateFormInput model.signupForm "email" text
-            }
-                ! []
-
-        UpdatePasswordText text ->
-            { model
-                | signupForm =
-                    Forms.updateFormInput model.signupForm "password" text
-            }
-                ! []
-
-        UpdateAgeText text ->
-            { model
-                | signupForm =
-                    Forms.updateFormInput model.signupForm "age" text
-            }
-                ! []
-
-        UpdateStoogeText text ->
-            { model
-                | signupForm =
-                    Forms.updateFormInput model.signupForm "stooge" text
+                    Forms.updateFormInput model.signupForm fieldName value
             }
                 ! []
 
@@ -135,7 +111,7 @@ emailFormElement form =
             , id "exampleInputEmail1"
             , placeholder "Enter email"
             , type_ "email"
-            , onInput UpdateEmailText
+            , onInput (UpdateFormText "email")
             ]
             []
         , small [ class "form-text text-muted" ]
@@ -152,7 +128,7 @@ passwordFormElement form =
             , id "exampleInputPassword"
             , placeholder "Enter password"
             , type_ "password"
-            , onInput UpdatePasswordText
+            , onInput (UpdateFormText "password")
             ]
             []
         , small [ class "form-text text-muted" ]
@@ -168,7 +144,7 @@ ageFormElement form =
             [ class "form-control"
             , id "exampleInputAge"
             , placeholder "Age"
-            , onInput UpdateAgeText
+            , onInput (UpdateFormText "age")
             ]
             []
         , small [ class "form-text text-muted" ]
@@ -184,7 +160,7 @@ stoogeFormElement form =
             [ class "form-control"
             , id "exampleInputStooge"
             , placeholder "Stooge"
-            , onInput UpdateStoogeText
+            , onInput (UpdateFormText "stooge")
             ]
             []
         , small [ class "form-text text-muted" ]
