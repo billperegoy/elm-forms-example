@@ -102,70 +102,57 @@ update msg model =
 -- View
 
 
-emailFormElement : Forms.Form -> Html Msg
-emailFormElement form =
-    div [ class "form-group" ]
-        [ label [ for "exampleInputEmail1" ] [ text "Email address" ]
-        , input
-            [ class "form-control"
-            , id "exampleInputEmail1"
-            , placeholder "Enter email"
-            , type_ "email"
-            , onInput (UpdateFormText "email")
+type InputType
+    = Email
+    | Password
+    | Text
+
+
+formElement : InputType -> String -> Forms.Form -> Html Msg
+formElement inputType name form =
+    let
+        inputId =
+            "exampleInput" ++ name
+
+        lowercased =
+            String.toLower name
+
+        inputType_ =
+            (toString inputType |> String.toLower)
+    in
+        div [ class "form-group" ]
+            [ label [ for inputId ] [ text name ]
+            , input
+                [ class "form-control"
+                , id inputId
+                , placeholder ("Enter " ++ lowercased)
+                , type_ inputType_
+                , onInput (UpdateFormText lowercased)
+                ]
+                []
+            , small [ class "form-text text-muted" ]
+                [ text (Forms.errorString form lowercased) ]
             ]
-            []
-        , small [ class "form-text text-muted" ]
-            [ text (Forms.errorString form "email") ]
-        ]
+
+
+emailFormElement : Forms.Form -> Html Msg
+emailFormElement =
+    formElement Email "Email"
 
 
 passwordFormElement : Forms.Form -> Html Msg
-passwordFormElement form =
-    div [ class "form-group" ]
-        [ label [ for "exampleInputPassword" ] [ text "Password" ]
-        , input
-            [ class "form-control"
-            , id "exampleInputPassword"
-            , placeholder "Enter password"
-            , type_ "password"
-            , onInput (UpdateFormText "password")
-            ]
-            []
-        , small [ class "form-text text-muted" ]
-            [ text (Forms.errorString form "password") ]
-        ]
+passwordFormElement =
+    formElement Password "Password"
 
 
 ageFormElement : Forms.Form -> Html Msg
-ageFormElement form =
-    div [ class "form-group" ]
-        [ label [ for "exampleInputAge" ] [ text "Age" ]
-        , input
-            [ class "form-control"
-            , id "exampleInputAge"
-            , placeholder "Age"
-            , onInput (UpdateFormText "age")
-            ]
-            []
-        , small [ class "form-text text-muted" ]
-            [ text (Forms.errorString form "age") ]
-        ]
+ageFormElement =
+    formElement Text "Age"
 
 
 stoogeFormElement : Forms.Form -> Html Msg
-stoogeFormElement form =
-    div [ class "form-group" ]
-        [ label [ for "exampleInputSge" ] [ text "Stooge" ]
-        , input
-            [ class "form-control"
-            , id "exampleInputStooge"
-            , placeholder "Stooge"
-            , onInput (UpdateFormText "stooge")
-            ]
-            []
-        , small [ class "form-text text-muted" ]
-            [ text (Forms.errorString form "stooge") ]
-        ]
+stoogeFormElement =
+    formElement Text "Stooge"
 
 
 submitButtonAttributes : Bool -> List (Html.Attribute Msg)
